@@ -7,6 +7,13 @@ export const createContact = (contact) => {
     }
   };
 
+export const createNumber = (numbers) => {
+    return {
+      type: actionTypes.CREATE_NEW_NUMBER,
+      numbers: numbers
+    }
+  };
+
 export const deleteContact = (id) => {
     return {
         type: actionTypes.REMOVE_CONTACT,
