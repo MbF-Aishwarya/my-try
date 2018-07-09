@@ -9,11 +9,11 @@ class App extends Component {
  constructor(props){
     super(props);
     this.handleChange = this.handleChange.bind(this);
-    this.handleChangenumber = this.handleChangenumber.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
       name: '',
       number: '',
+      edit: false,
       tableData: {
         nameandid: ["name","id"],
         nameandidrow: [{
@@ -31,40 +31,34 @@ class App extends Component {
   }
 
   handleChange(e){
+    console.log(e.target.name);
     this.setState({
-      name: e.target.value,
-    })
-  }
-
-  handleChangenumber(e){
-    this.setState({
-      number: e.target.value
+      [e.target.name]:e.target.value,
     })
   }
 
   handleSubmit(e){
     e.preventDefault();
     let contact = {
-      name: this.state.name
+      name: this.state.name,
+      number: this.state.number,
+      id: new Date().toString()
     }
-    let numbers = {
-      number: this.state.number
-    }
+    this.props.createContact(contact);
     this.setState({
       name: '',
-      number:''
+      number: '',
+      id: ''
     });
-    this.props.createContact(contact),
-    this.props.createNumber(numbers)
   }
 
   listView(data, index){
     return (
-      <div className="row">
-        <div className="col-md-10">
-         <tr>
-          <td key={index}>
-            {data.name},
+        <tr key={index}>
+          <td>
+            {data.name}
+          </td>
+          <td>
             {data.number}
           </td>
           <td>
@@ -72,17 +66,30 @@ class App extends Component {
               Remove
             </button>
           </td>
-          </tr>
-        </div>
-    </div> 
+          <td>
+            <button onClick={this.editContact.bind(this, data)} className="btn btn-warning">
+             Edit
+            </button>
+          </td>
+        </tr>
+   
     )
   }
-
- 
 
   deleteContact(e, index){
     e.preventDefault();
     this.props.deleteContact(index);
+  }
+  updateContact(e, index){
+    e.preventDefault();
+    this.props.updateContact(index);
+  }
+
+  editContact(data){
+    this.setState({
+      edit: !this.state.edit
+    })
+    console.log(data);
   }
   
   render() {
@@ -96,7 +103,7 @@ class App extends Component {
       </tr></thead>)
       var tableBody = dataRows.map(function(row){
         return(
-          <tr>
+          <tr key={row.id}>
             {dataColumns.map(function(column){
               return <td>{row[column]}</td>;
             })}
@@ -123,9 +130,9 @@ class App extends Component {
             <form onSubmit={this.handleSubmit}>
               <div className="row">
                 <div className="col-md-10">
-                  <input type="text"  onChange={this.handleChange} className="form-control" value={this.state.name}/>
+                  <input type="text"  onChange={this.handleChange} className="form-control" value={this.state.name} name="name"/>
                   <br />
-                  <input type="number" onChange={this.handleChangenumber} className="form-control" value={this.state.number}/>
+                  <input type="number" onChange={this.handleChange} className="form-control" value={this.state.number} name="number"/>
                 </div>
                 <div className="col-md-2">
                   <input type="submit" className="btn btn-success" value="ADD"/>
@@ -136,12 +143,11 @@ class App extends Component {
           <hr />
         {
           <table className="table table-bordered table-hover" width="100%">
-            <tbody>
-             <tr>{this.props.contacts.map((contact, i) => this.listView(contact, i))}</tr>
-            </tbody>
+             {this.props.contacts.map((contact, i) => this.listView(contact, i))}
           </table>
         }
         </div>
+        {this.state.edit&&<div>edit</div>}
       </div>
     )
   }
@@ -149,17 +155,17 @@ class App extends Component {
 
 
 const mapStateToProps = (state, ownProps) => {
+  console.log(state);
   return {
-    contacts: state.contacts,
-    numbers: state.numbers
+    contacts: state.contacts
   }
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     createContact: contact => dispatch(contactAction.createContact(contact)),
-    createNumber: number => dispatch(contactAction.createNumber(number)),
-    deleteContact: index =>dispatch(contactAction.deleteContact(index))
+    deleteContact: index =>dispatch(contactAction.deleteContact(index)),
+    updateContact: index =>dispatch(contactAction.updateContact(index))
   }
 };
 
