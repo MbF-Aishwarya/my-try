@@ -14,9 +14,17 @@ export const deleteContact = (id) => {
     }
 }
 
-export const updateContact = (id) => {
+export const editContact = (data, id) => {
+    return {
+        type: actionTypes.EDIT_CONTACT,
+        id: id
+    }
+}
+
+export const updateContact = (data) => {
     return {
         type: actionTypes.UPDATE_CONTACT,
-        id: id
+        id: data,
+
     }
 }

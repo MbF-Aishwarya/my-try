@@ -3,17 +3,13 @@ import './App.css';
 import { connect } from 'react-redux';
 import * as contactAction from './actions/contactAction';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
-
+import FormComponent from './Form';
+import EditComponent from './EditForm';
 
 class App extends Component {
  constructor(props){
     super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
-      name: '',
-      number: '',
-      edit: false,
       tableData: {
         nameandid: ["name","id"],
         nameandidrow: [{
@@ -26,53 +22,37 @@ class App extends Component {
           },
         ]
       },
-      mess:"guys"
+      mess:"guys",
+      isOpen: false
     }
   }
-
-  handleChange(e){
-    console.log(e.target.name);
+ 
+  toggleModal = () => {
     this.setState({
-      [e.target.name]:e.target.value,
-    })
-  }
-
-  handleSubmit(e){
-    e.preventDefault();
-    let contact = {
-      name: this.state.name,
-      number: this.state.number,
-      id: new Date().toString()
-    }
-    this.props.createContact(contact);
-    this.setState({
-      name: '',
-      number: '',
-      id: ''
+      isOpen: !this.state.isOpen
     });
   }
 
   listView(data, index){
     return (
-        <tr key={index}>
-          <td>
-            {data.name}
-          </td>
-          <td>
-            {data.number}
-          </td>
-          <td>
-            <button onClick={(e) => this.deleteContact(e, index)} className="btn btn-danger">
-              Remove
-            </button>
-          </td>
-          <td>
-            <button onClick={this.editContact.bind(this, data)} className="btn btn-warning">
-             Edit
-            </button>
-          </td>
-        </tr>
-   
+      <tr key={index}>
+        <td>
+          {data.name}
+        </td>
+        <td>
+          {data.number}
+        </td>
+        <td>
+          <button onClick={(e) => this.deleteContact(e, index)} className="btn btn-danger">
+            Remove
+          </button>
+        </td>
+        <td>
+          <button onClick={this.editContact.bind(this, data)} className="btn btn-warning">
+           Edit
+          </button>
+        </td>
+      </tr>
     )
   }
 
@@ -80,15 +60,13 @@ class App extends Component {
     e.preventDefault();
     this.props.deleteContact(index);
   }
-  updateContact(e, index){
-    e.preventDefault();
-    this.props.updateContact(index);
-  }
-
+  
   editContact(data){
     this.setState({
-      edit: !this.state.edit
+      edit: !this.state.edit,
+      newData : data
     })
+    editing:false,
     console.log(data);
   }
   
@@ -123,23 +101,10 @@ class App extends Component {
         </table>
         </div>
         <h1>Sample form</h1>
-
-        <hr />
+            <FormComponent />
+        <hr/>
         <div>
           <h3>Add Contact Form</h3>
-            <form onSubmit={this.handleSubmit}>
-              <div className="row">
-                <div className="col-md-10">
-                  <input type="text"  onChange={this.handleChange} className="form-control" value={this.state.name} name="name"/>
-                  <br />
-                  <input type="number" onChange={this.handleChange} className="form-control" value={this.state.number} name="number"/>
-                </div>
-                <div className="col-md-2">
-                  <input type="submit" className="btn btn-success" value="ADD"/>
-                  
-                </div>
-              </div>
-            </form>
           <hr />
         {
           <table className="table table-bordered table-hover" width="100%">
@@ -147,7 +112,11 @@ class App extends Component {
           </table>
         }
         </div>
-        {this.state.edit&&<div>edit</div>}
+        {this.state.edit &&
+          <div>
+            <EditComponent contact={this.state.newData} />
+          </div>
+          }
       </div>
     )
   }
@@ -163,9 +132,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    createContact: contact => dispatch(contactAction.createContact(contact)),
     deleteContact: index =>dispatch(contactAction.deleteContact(index)),
-    updateContact: index =>dispatch(contactAction.updateContact(index))
+    editContact: index =>dispatch(contactAction.editContact(index))
   }
 };
 
