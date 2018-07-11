@@ -8,6 +8,14 @@ img.bg {
   left: 0;
   z-index: -1;
 }
+.content-bg{
+    padding:90px 60px;
+    background: #fbfbfb;
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px 2px white;
+    top:70px;
+    position: relative;
+}
 .App {
   text-align: center;
 }

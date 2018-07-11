@@ -102,6 +102,7 @@ class App extends Component {
     return(
     
       <div className="container">
+        <div className="content-bg">
         <div>
         <div><img className='bg' src={'https://source.unsplash.com/'+this.state.x+'x'+this.state.y+'/?nature'} /></div>
          <h2>Welcome, {this.state.mess}</h2>
@@ -129,6 +130,7 @@ class App extends Component {
             <EditComponent contact={this.state.newData} />
           </div>
           }
+          </div>
       </div>
     )
   }
