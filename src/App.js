@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import './App.css';
 import { connect } from 'react-redux';
 import * as contactAction from './actions/contactAction';
-import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import FormComponent from './Form';
 import EditComponent from './EditForm';
 
 class App extends Component {
+  
  constructor(props){
     super(props);
     this.state = {
@@ -31,6 +31,17 @@ class App extends Component {
     this.setState({
       isOpen: !this.state.isOpen
     });
+  }
+
+  componentWillMount(){
+    var w = window,
+    d = document,
+    e = d.documentElement,
+    g = d.getElementsByTagName('body')[0],
+    x = w.innerWidth || e.clientWidth || g.clientWidth,
+    y = w.innerHeight|| e.clientHeight|| g.clientHeight;
+    
+    this.setState({x:x,y:y});
   }
 
   listView(data, index){
@@ -92,6 +103,7 @@ class App extends Component {
     
       <div className="container">
         <div>
+        <div><img className='bg' src={'https://source.unsplash.com/'+this.state.x+'x'+this.state.y+'/?nature'} /></div>
          <h2>Welcome, {this.state.mess}</h2>
         <table className="table table-bordered table-hover" width="100%">
           {tableHeaders}

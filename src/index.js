@@ -11,7 +11,6 @@ import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import registerServiceWorker from './registerServiceWorker';
 
 const store = configureStore();
-
 ReactDOM.render(
 	<Provider store={store}>
 		<App />
