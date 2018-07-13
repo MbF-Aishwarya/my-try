@@ -4,32 +4,33 @@ import { connect } from 'react-redux';
 import * as contactAction from './actions/contactAction';
 import FormComponent from './Form';
 import EditComponent from './EditForm';
+import PlanetSearch from './tabletype/planetsearch';
+import TableCustom from './tablecustom/tablecustom';
+import TableOptions from './tableoptions/tableoptions';
 
 class App extends Component {
   
  constructor(props){
     super(props);
     this.state = {
-      tableData: {
-        nameandid: ["name","id"],
-        nameandidrow: [{
-          'name':'aishu',
-          'id':'02',
-          },
-          {
-         'name':'bharu',
-          'id':'03',
-          },
-        ]
-      },
-      mess:"guys",
-      isOpen: false
+      mess:"Everyone",
+      isOpen: false,
     }
   }
  
-  toggleModal = () => {
+  optionsType1 = () => {
     this.setState({
-      isOpen: !this.state.isOpen
+       type1: !this.state.type1,
+    });
+  }
+  optionsType2 = () => {
+    this.setState({
+       type2: !this.state.type2,
+    });
+  }
+  optionsType3 = () => {
+    this.setState({
+       type3: !this.state.type3,
     });
   }
 
@@ -82,73 +83,85 @@ class App extends Component {
   }
   
   render() {
-    var dataColumns = this.state.tableData.nameandid;
-    var dataRows = this.state.tableData.nameandidrow;
-    var tableHeaders = (<thead><tr>
-      {dataColumns.map(function(column)
-        {
-        return <th>{column}</th>
-        })}
-      </tr></thead>)
-      var tableBody = dataRows.map(function(row){
-        return(
-          <tr key={row.id}>
-            {dataColumns.map(function(column){
-              return <td>{row[column]}</td>;
-            })}
-          </tr>
-        )
-      });
+   
     return(
-    
-      <div className="container">
-        <div className="content-bg">
-        <div>
-        <div><img className='bg' src={'https://source.unsplash.com/'+this.state.x+'x'+this.state.y+'/?nature'} /></div>
-         <h2>Welcome, {this.state.mess}</h2>
-        <table className="table table-bordered table-hover" width="100%">
-          {tableHeaders}
-          <tbody>
-           {tableBody}
-          </tbody>
-        </table>
-        </div>
-        <h1>Sample form</h1>
-            <FormComponent />
-        <hr/>
-        <div>
-          <h3>Add Contact Form</h3>
-          <hr />
-        {
-          <table className="table table-bordered table-hover" width="100%">
-             {this.props.contacts.map((contact, i) => this.listView(contact, i))}
-          </table>
-        }
-        </div>
-        {this.state.edit &&
-          <div>
-            <EditComponent contact={this.state.newData} />
+        <div className="container">
+          <div className="content-bg">
+            <div>
+              <div><img className='bg' src={'https://source.unsplash.com/'+this.state.x+'x'+this.state.y+'/?nature'} /></div>
+               <h2>Welcome, {this.state.mess}!</h2>
+               <p>Please choose a table type</p>
+               <hr/>
+                  <div className="tableButton">
+                  <button onClick={this.optionsType1.bind(this)} className="btn btn-warning">
+                    API Table
+                  </button>
+                  <button onClick={this.optionsType2.bind(this)} className="btn btn-warning">
+                   Custom Table
+                  </button>
+                  <button onClick={this.optionsType3.bind(this)} className="btn btn-warning">
+                    Dynamic Table
+                  </button>
+                </div>
+             <div>
+             {this.state.type1 &&
+              <div>
+              <br />
+               <h5>A Table Sample - API</h5>
+                <PlanetSearch />
+              </div>
+             }
+             {this.state.type2 &&
+                <div>
+                 <br />
+                  <h5>A Table Sample - Custom Table</h5>
+                  <TableCustom/>                  
+               </div>
+             }
+            
+            </div>
           </div>
-          }
+           {this.state.type3 &&
+            <div>
+              <br />
+               <h5>A Table Sample - Dynamic Table</h5>
+                <FormComponent />
+               <hr/>
+               <div>
+                <h4>Add Contact Form</h4>
+                <hr />
+                <br />
+                  {
+                    <table className="table table-bordered table-hover" width="100%">
+                     {this.props.contacts.map((contact, i) => this.listView(contact, i))}
+                    </table>
+                  }
+                 </div>
+                {this.state.edit &&
+                <div>
+                  <br />
+                  <EditComponent contact={this.state.newData} />
+                </div>
+                } 
+              </div> 
+            }         
           </div>
-      </div>
-    )
-  }
-}
+        </div>
+        )
+      }
+    }
+    const mapStateToProps = (state, ownProps) => {
+      console.log(state);
+      return {
+        contacts: state.contacts
+      }
+    };
 
-
-const mapStateToProps = (state, ownProps) => {
-  console.log(state);
-  return {
-    contacts: state.contacts
-  }
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    deleteContact: index =>dispatch(contactAction.deleteContact(index)),
-    editContact: index =>dispatch(contactAction.editContact(index))
-  }
-};
+    const mapDispatchToProps = (dispatch) => {
+      return {
+        deleteContact: index =>dispatch(contactAction.deleteContact(index)),
+        editContact: index =>dispatch(contactAction.editContact(index))
+      }
+    };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
