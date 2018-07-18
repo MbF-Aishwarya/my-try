@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as contactAction from './actions/contactAction';
 import FormComponent from './Form';
 import EditComponent from './EditForm';
-import PlanetSearch from './tabletype/planetsearch';
+import PlanetSearch from './tableapi/planetsearch';
 import TableCustom from './tablecustom/tablecustom';
 import TableOptions from './tableoptions/tableoptions';
 
@@ -15,6 +15,11 @@ class App extends Component {
     this.state = {
       mess:"Everyone",
       isOpen: false,
+      heading:["name","id"],
+      // values:{
+      //   name:{contacts.name},
+      //   id:{contacts.number},
+      // }
     }
   }
  
@@ -46,8 +51,20 @@ class App extends Component {
   }
 
   listView(data, index){
+    var Heading=this.state.heading;
+    var ContactData = this.props.contacts;
+    console.log("Header content",Heading);
+    console.log("cheader",ContactData);
+
+    var tHeader = (<div>
+      { Heading.map(function(heading){
+        return
+        <th>{heading}</th>
+      })}
+       </div>
+        );
     return (
-      <tr key={index}>
+     <tr key={index}>
         <td>
           {data.name}
         </td>
@@ -83,7 +100,9 @@ class App extends Component {
   }
   
   render() {
-   
+    
+    // var tHeader = 
+    // console.log(tHeader);
     return(
         <div className="container">
           <div className="content-bg">
@@ -125,20 +144,24 @@ class App extends Component {
             <div>
               <br />
                <h5>A Table Sample - Dynamic Table</h5>
+                <hr/>
                 <FormComponent />
                <hr/>
                <div>
-                <h4>Add Contact Form</h4>
-                <hr />
-                <br />
                   {
+                    <div>
+                    <h4>Add Contact Form</h4>                     
+                    <hr />
+                    <br />
                     <table className="table table-bordered table-hover" width="100%">
                      {this.props.contacts.map((contact, i) => this.listView(contact, i))}
                     </table>
+                    </div>
                   }
                  </div>
                 {this.state.edit &&
                 <div>
+                  <h4>Edit Form</h4>    
                   <br />
                   <EditComponent contact={this.state.newData} />
                 </div>

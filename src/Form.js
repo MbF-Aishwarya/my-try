@@ -38,12 +38,13 @@ class FormComponent extends Component {
 		return(
 			<form onSubmit={this.handleSubmit}>
 		      <div className="row">
-		        <div className="col-md-10">
-		          <input type="text"  onChange={this.handleChange} className="form-control" value={this.state.name} name="name"/>
+		        <div className="col-md-12">
+		          <h4>Name : </h4><input type="text"  onChange={this.handleChange} className="form-control" value={this.state.name} name="name"/>
 		          <br />
-		          <input type="number" onChange={this.handleChange} className="form-control" value={this.state.number} name="number"/>
+		          <h4>ContactNumber :</h4><input type="number" onChange={this.handleChange} className="form-control" value={this.state.number} name="number"/>
 		        </div>
 		        <div className="col-md-2">
+		        	<br />
 		          <input type="submit" className="btn btn-success" value="ADD"/>
 		        </div>
 		      </div>

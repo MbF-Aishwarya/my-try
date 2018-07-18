@@ -36,6 +36,7 @@ class TableCustom extends React.Component {
                 return <th>{column}</th>
             })}
             </tr></thead>)
+            console.log(tableHeaders);
             var tableBody = dataRows.map(function(row){
                 return(
                   <tr key={row.id}>
