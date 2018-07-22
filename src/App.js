@@ -7,6 +7,8 @@ import EditComponent from './EditForm';
 import PlanetSearch from './tabletype/planetsearch';
 import TableCustom from './tablecustom/tablecustom';
 import TableOptions from './tableoptions/tableoptions';
+import ModalGallery from './routing/modalrouter';
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 class App extends Component {
   
@@ -91,6 +93,9 @@ class App extends Component {
               <div><img className='bg' src={'https://source.unsplash.com/'+this.state.x+'x'+this.state.y+'/?nature'} /></div>
                <h2>Welcome, {this.state.mess}!</h2>
                <p>Please choose a table type</p>
+               <div>
+               <ModalGallery />
+               </div>
                <hr/>
                   <div className="tableButton">
                   <button onClick={this.optionsType1.bind(this)} className="btn btn-warning">
